@@ -26,9 +26,19 @@ const Dashboard = () => {
     setShowUploadResume(false)
     navigate('/app/builder/res123')
   }
+  const editTitle = async (event) => {
+    event.preventDefault()
+  }
+  const deleteResume = async (resumeId) => {
+    const confirmDelete = window.confirm("Are you sure you want to delete this resume?")
+    if(confirmDelete){
+      setAllResumes(prev => prev.filter(resume => resume._id !== resumeId))
+    }
+  }
   useEffect(() => {
     loadAllResumes()
   },[])
+  
   return (
     <div>
       <div className='max-w-7xl mx-auto px-4 py-8'>
@@ -48,15 +58,15 @@ const Dashboard = () => {
           {allResumes.map((resume, index) => {
             const baseColor = colors[index % colors.length];
             return (
-              <button key={index} className='relative w-full sm:max-w-36 h-48 flex flex-col items-center justify-center rounded-lg gap-2 border group hover:shadow-lg transition-all duration-300 cursor-pointer' style={{background: `linear-gradient(135deg, ${baseColor}10, ${baseColor}40)`, bordercolor: baseColor+'40'}}>
+              <button onClick={() => navigate(`/app/builder/${resume._id}`)} key={index} className='relative w-full sm:max-w-36 h-48 flex flex-col items-center justify-center rounded-lg gap-2 border group hover:shadow-lg transition-all duration-300 cursor-pointer' style={{background: `linear-gradient(135deg, ${baseColor}10, ${baseColor}40)`, bordercolor: baseColor+'40'}}>
                 <FilePenLineIcon className='size-7 group-hover:scale-105 transition-all' style={{color: baseColor}} />
                 <p className='text-sm font-medium group-hover:scale-105 transition-all px-2 text-center' style={{color: baseColor}}>{resume.title}</p>
                 <p className='absolute bottom-1 text-[11px] text-slate-400 group-hover:text-slate-500 transition-all duration-300 px-2 text-center' style={{color: baseColor+'90'}}>
                   updated on {new Date(resume.updatedAt).toLocaleDateString()}
                 </p>
-                <div className='absolute top-1 right-1 group-hover:flex items-center hidden'>
-                  <TrashIcon className='size-7 p-1.5 text-slate-700 hover:bg-white/50 rounded transition-colors' />
-                  <PencilIcon className='size-7 p-1.5 text-slate-700 hover:bg-white/50 rounded transition-colors' />
+                <div onClick={(e) => e.stopPropagation()} className='absolute top-1 right-1 group-hover:flex items-center hidden'>
+                  <TrashIcon  onClick={() => deleteResume(resume._id)} className='size-7 p-1.5 text-slate-700 hover:bg-white/50 rounded transition-colors' />
+                  <PencilIcon onClick={() => {setEditResumeId(resume._id); setTitle(resume.title)}} className='size-7 p-1.5 text-slate-700 hover:bg-white/50 rounded transition-colors' />
                 </div>
               </button>
             )
@@ -97,6 +107,18 @@ const Dashboard = () => {
                   </div>
                   <button className='px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition'>Upload</button>
                   <XIcon onClick={() => {setShowUploadResume(false); setTitle('')}} className='size-6 p-1.5 text-slate-700 hover:bg-white/50 rounded transition-colors absolute top-2 right-2 cursor-pointer' />
+                </div>
+              </form>
+            )
+          }
+          {
+            editResumeId && (
+              <form onSubmit={editTitle} onClick={() => setEditResumeId('')} className='fixed inset-0 bg-black/70 backdrop-blur bg-opacity-50 z-10 flex items-center justify-center'>
+                <div onClick={e => e.stopPropagation()} className='relative bg-slate-50 border shadow-md rounded-lg w-full max-w-sm p-6'>
+                  <h2 className='text-2xl font-medium mb-4'>Edit Resume Title</h2>
+                  <input onChange={(e) => setTitle(e.target.value)} value={title} type="text" placeholder='Resume Title' className='w-full p-3 rounded-md mb-4 border' />
+                  <button className='px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition'>Update</button>
+                  <XIcon onClick={() => {setEditResumeId(''); setTitle('')}} className='size-6 p-1.5 text-slate-700 hover:bg-white/50 rounded transition-colors absolute top-2 right-2 cursor-pointer' />
                 </div>
               </form>
             )
