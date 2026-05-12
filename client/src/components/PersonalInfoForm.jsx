@@ -1,4 +1,4 @@
-import { Linkedin, BriefcaseBusiness, Mail, MapPin, Phone, User, Globe } from 'lucide-react'
+import { BriefcaseBusiness, Mail, MapPin, Phone, User, Globe, LibraryIcon } from 'lucide-react'
 import React from 'react'
 
 const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground}) => {
@@ -11,7 +11,7 @@ const PersonalInfoForm = ({data, onChange, removeBackground, setRemoveBackground
         {key: 'phone', label: 'Phone', icon: Phone, type: 'tel', required: false},
         {key: 'location', label: 'Location', icon: MapPin, type: 'text', required: false},
         {key: 'profession', label: 'Profession', icon: BriefcaseBusiness, type: 'text', required: false},
-        {key: 'linkedin', label: 'LinkedIn', icon: Linkedin, type: 'url', required: false},
+        {key: 'linkedin', label: 'LinkedIn', icon: LibraryIcon, type: 'url', required: false},
         {key: 'website', label: 'Website', icon: Globe, type: 'url', required: false},
     ]
   return (
