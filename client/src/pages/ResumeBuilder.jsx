@@ -5,6 +5,8 @@ import { ArrowLeftIcon, Briefcase, ChevronLeft, ChevronRight, FileText, FolderIc
 import PersonalInfoForm from '../components/PersonalInfoForm'
 import ResumePreview from '../components/ResumePreview'
 import TemplateSelector from '../components/TemplateSelector'
+import ColorPicker from '../components/ColorPicker'
+import ProfessionalSummaryForm from '../components/ProfessionalSummaryForm'
 
 const ResumeBuilder = () => {
   const { resumeId } = useParams()
@@ -65,16 +67,15 @@ const ResumeBuilder = () => {
               <div className='flex justify-between items-center mb-6 border-b py-1 border-gray-300'>
                 <div className='flex items-center gap-2'>
                   <TemplateSelector selectedTemplate={resumeData.template} onChange={(template) => setResumeData(prev => ({...prev, template}))} />
+                  <ColorPicker SelectedColor={resumeData.accent_color} onChange={(accent_color) => setResumeData(prev => ({...prev, accent_color}))} />
                 </div>
                 <div className='flex items-center'>
                   {activeSectionIndex !== 0 && (
-                    <button
-                      className='flex items-center gap-1 p-3 rounded-lg text-sm font-medium transition-all text-gray-600 hover:bg-gray-50' disabled={activeSectionIndex === 0} onClick={(prevIndex) => Math.max(prevIndex - 1, 0)}>
+                    <button onClick={() => setActiveSectionIndex((prevIndex) => Math.max(prevIndex - 1, 0))} className='flex items-center gap-1 p-3 rounded-lg text-sm font-medium transition-all text-gray-600 hover:bg-gray-50' disabled={activeSectionIndex === 0}>
                         <ChevronLeft className='size-4' /> Previous
                     </button>
                   )}
-                  <button
-                      className={`flex items-center gap-1 p-3 rounded-lg text-sm font-medium transition-all text-gray-600 hover:bg-gray-50 ${activeSectionIndex === sections.length - 1 && 'opacity-50'}`} disabled={activeSectionIndex === sections.length - 1} onClick={(prevIndex) => Math.min(prevIndex + 1, sections.length - 1)}>
+                  <button onClick={() => setActiveSectionIndex((prevIndex) => Math.min(prevIndex + 1, sections.length - 1))} className={`flex items-center gap-1 p-3 rounded-lg text-sm font-medium transition-all text-gray-600 hover:bg-gray-50 ${activeSectionIndex === sections.length - 1 && 'opacity-50'}`} disabled={activeSectionIndex === sections.length - 1}>
                         Next <ChevronRight className='size-4' />
                     </button>
                 </div>
@@ -83,9 +84,10 @@ const ResumeBuilder = () => {
               {/* Section Form */}
               <div className='space-y-6'>
                 {activeSection.id === 'personal' && (
-                  <div>
                     <PersonalInfoForm data={resumeData.personal_info} onChange={(data) => setResumeData(prev => ({...prev, personal_info: data}))} removeBackground={removeBackground} setRemoveBackground={setRemoveBackground} />
-                  </div>
+                )}
+                {activeSection.id === 'summary' && (
+                  <ProfessionalSummaryForm data={resumeData.professional_summary} onChange={(data) => setResumeData(prev => ({...prev, professional_summary: data}))} setResumeData={setResumeData} />
                 )}
               </div>
             </div>

@@ -1,8 +1,8 @@
 import { Layout, Check } from 'lucide-react'
-import React from 'react'
+import React, {useState} from 'react'
 
 const TemplateSelector = ({selectedTemplate, onChange}) => {
-    const [isOpen, setIsOpen] = React.useState(false)
+    const [isOpen, setIsOpen] = useState(false)
     const templates = [
         {id: 'classic', name: 'Classic', preview: 'A traditional resume layout with a clear hierarchy and clean design.'},
         {id: 'modern', name: 'Modern', preview: 'A contemporary resume layout with a modern aesthetic.'},
